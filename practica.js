@@ -53,3 +53,11 @@ const readDir = (__dirname => {
 
 a.find((f) => f === 'importante');
 filter(fn => fn.endsWith('.md'));
+
+/* files.filter(function(md) { 
+               return path.extname(md) === ext
+               resolve(files.forEach(md => {
+              if (path.extname(md) === ext){
+                console.log('prueba', md)
+                return a 
+               */
