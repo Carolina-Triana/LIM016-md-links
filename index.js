@@ -153,7 +153,8 @@ readDirectory(rute(ruta))
 	.then((readDirectory) => {
 		if (readDirectory) {
 			console.log("ok directory", readDirectory)
-			readMdFiles(readDirectory)
+		  readMdFiles(readDirectory)
+		  return readDirectory
 		} else {
 			console.log("not ok directory")
 		}
@@ -173,23 +174,21 @@ const statusOfLinks = (links) => {
 				"href" : links[i].href, 
 				"status" : res.status,
 				"file" : links[i].file
-			}
-			}))
-		}
-		resolve (Promise.all(arrLinks))
-	})
-};
+			}})
+			.catch((err)=> // me falta arreglar el catch de error
+			{
+				if (err){
+					console.log(err + 'direccion no existe')
+				}
+			return arrLinks
+			})
+			)}
+			resolve (Promise.all(arrLinks))
+		 })
+}	
+		
 
-statusOfLinks([{
-    text: '[Node.js],Node.js',
-    href: 'https://nodejs.org/',
-    file: 'C:\\Users\\CLARA\\Documents\\LIM016-md-links\\links1.md'
-  },
-  {
-    text: '[md-links],md-links',
-    href: 'https://user-images.githubusercontent.com/110297/42118443-b7a5f1f0-7bc8-11e8-96ad-9cc5593715a6.jpg',
-    file: 'C:\\Users\\CLARA\\Documents\\LIM016-md-links\\links2.md'
-  }])
+statusOfLinks(readMdFiles(readDirectory(rute(ruta))))
 .then((links) =>{
 console.log('funciona?', links)
 })
