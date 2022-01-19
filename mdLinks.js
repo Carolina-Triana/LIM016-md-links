@@ -8,21 +8,18 @@ import {
     statusOfLinks
     } from './index.js';
 
- const mdLinks = (path , option) =>{
+ const mdLinks = (path) =>{
 return new Promise ((resolve, reject) =>{
- if (rute(path)){
-     return path}
-  if (path) {
-    itsDirectory(path) === true
-    readDirectory(path).then((readPath) =>{
+   let userPath = rute(path)
+  if (itsDirectory(userPath) === true /*&& option.validate === true*/) {   
+    readDirectory(userPath).then((readPath) =>{
     readMdFiles(readPath).then((links)=>{
         statusOfLinks(links)
     })
     }); return mdLinks
   }
-  if (path){
-      itsFile(path) === true
-      readFile(path).then((readFile) =>{
+  if (itsFile(userPath) === true){      
+      readFile(userPath).then((readFile) =>{
           readMdFiles(readFile).then((links) =>{
             statusOfLinks(links)
           })
@@ -35,4 +32,8 @@ return new Promise ((resolve, reject) =>{
 
 })
 
- }
+ };
+
+mdLinks('C:/Users/CLARA/Documents/LIM016-md-links').then((res)=>{
+  console.log('sera que funciona?', res)
+})
