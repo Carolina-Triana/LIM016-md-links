@@ -1,14 +1,13 @@
 import fs from "fs";
 import path from "path";
-//import fetch from "node-fetch";
+import fetch from "node-fetch";
 let ruta = "../LIM016-md-links";
 let ext = ".md";
-let cont = [];
 
 //funcion para resolver si la ruta es absoluta o relativa
 const rute = (route) => {
-  if (path.isAbsolute(route)) {
-        return route;
+    if (path.isAbsolute(route)) {
+          return route;
   } else {
     return path.resolve(route);
   }
@@ -23,8 +22,6 @@ const itsDirectory = (filePath) => {
         return;
       }
       resolve(stats.isDirectory());
-      //crear una funcion para recorrer las carpetas dentro del directorio
-      //crear un else si es un archivo que debe pasar
     });
   });
   return directoryPromise;
@@ -33,7 +30,7 @@ itsDirectory(rute(ruta)).then((isDirectory) => {
   if (isDirectory) {
     console.log("DIRECTORIO INGRESADO", isDirectory);
   } else {
-    console.log("NO DIRECTORIO");
+    console.log("NO DIRECTORIO", isDirectory);
   }
 });
 
@@ -56,7 +53,6 @@ itsFile(rute(ruta)).then((isFile) => {
   }
 });
 
-//unir esta funcion con si es un directorio que pase esto
 //Leer directorio y filtrar por md
 const readDirectory = (filePath) => {
   return new Promise((resolve, reject) => {
@@ -93,6 +89,7 @@ const linksRegex = (path) => {
       return {
         text: text,
         href: href,
+        file: 'preguntar como poner los links'
       };
       });resolve(results);
       
@@ -119,10 +116,6 @@ const readFile = (filePath) => {
   }) ; 
 }
 
-readFile(rute(ruta))
-	.then((data) => {
-		console.log('que es esto',data)
-	})
 
 //leer archivos varios  y devolver links
 const readMdFiles = (arrayMd) => {
@@ -146,30 +139,6 @@ const readMdFiles = (arrayMd) => {
     });return Promise.all(objLinks);
   };
 
-readMdFiles([
-  "C:\\Users\\CLARA\\Documents\\LIM016-md-links\\links1.md",
-  "C:\\Users\\CLARA\\Documents\\LIM016-md-links\\links2.md",
-  "C:\\Users\\CLARA\\Documents\\LIM016-md-links\\README.md",
-]).then((links) => {
- console.log("funciona?", links);
-}).catch((err) => {
-console.log('error', err)
-})
-
-readDirectory(rute(ruta)).then((readDirectory) => {
-  if (readDirectory) {
-    console.log("ok directory", readDirectory);
-    return readDirectory;
-  }/*
-  if (readDirectory) {
-    readMdFiles(readDirectory).then((readLinks) => {
-      console.log(readLinks);
-    });
-  } */else {
-    console.log("not ok directory");
-  }
-});
-
 // funcion verificar status de links
 
 const statusOfLinks = (links) => {
@@ -179,8 +148,7 @@ const statusOfLinks = (links) => {
       arrLinks.push(
         fetch(links[i].href)
           .then((res) => {
-            //console.log('res link',res)
-            return {
+              return {
               text: links[i].text,
               href: links[i].href,
               status: res.status,
@@ -198,11 +166,9 @@ const statusOfLinks = (links) => {
             };
       })
       )}
-    resolve(Promise.all(arrLinks));
+    resolve(arrLinks)
   });
 };
-
-
 
 export {
   rute,
