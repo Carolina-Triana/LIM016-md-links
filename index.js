@@ -1,19 +1,20 @@
 import fs from "fs";
 import path from "path";
 import fetch from "node-fetch";
-let ruta = "../LIM016-md-links";
+let ruta = process.argv[2];
 let ext = ".md";
 
 //funcion para resolver si la ruta es absoluta o relativa
 const rute = (route) => {
     if (path.isAbsolute(route)) {
           return route;
-  } else {
+    }
+   else {
     return path.resolve(route);
   }
 };
-console.log("RUTA ABSOLUTA", rute(ruta));
-
+//console.log("RUTA ABSOLUTA", rute(ruta));
+ //Funcion para saber si la ruta es un directorio
 const itsDirectory = (filePath) => {
   let directoryPromise = new Promise((resolve, reject) => {
     fs.lstat(filePath, (err, stats) => {
@@ -26,14 +27,14 @@ const itsDirectory = (filePath) => {
   });
   return directoryPromise;
 };
-itsDirectory(rute(ruta)).then((isDirectory) => {
+/*itsDirectory(rute(ruta)).then((isDirectory) => {
   if (isDirectory) {
     console.log("DIRECTORIO INGRESADO", isDirectory);
   } else {
     console.log("NO DIRECTORIO", isDirectory);
   }
-});
-
+});*/
+/*
 const itsFile = (filePath) => {
   return new Promise((resolve, reject) => {
     fs.lstat(filePath, (err, stats) => {
@@ -52,7 +53,7 @@ itsFile(rute(ruta)).then((isFile) => {
     console.log("NO ES UN ARCHIVO");
   }
 });
-
+*/
 //Leer directorio y filtrar por md
 const readDirectory = (filePath) => {
   return new Promise((resolve, reject) => {
@@ -89,7 +90,7 @@ const linksRegex = (path) => {
       return {
         text: text,
         href: href,
-        file: 'preguntar como poner los links'
+        file: ''
       };
       });resolve(results);
       
@@ -151,9 +152,9 @@ const statusOfLinks = (links) => {
               return {
               text: links[i].text,
               href: links[i].href,
-              status: res.status,
+              status: res.status,              
+              message: links[i].message = (res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL',
               file: links[i].file,
-              message: links[i].message = (res.status >= 200) && (res.status <= 399) ? 'OK' : 'FAIL'
             };
           })
           .catch((error) => {
@@ -162,7 +163,8 @@ const statusOfLinks = (links) => {
               href: links[i].href,
               file: links[i].file,
               status: 'Error' + error,
-              message: 'FAIL'
+              message: 'FAIL',
+              file: links[i].file,
             };
       })
       )}
@@ -173,7 +175,6 @@ const statusOfLinks = (links) => {
 export {
   rute,
   itsDirectory,
-  itsFile,
   readDirectory,
   readFile,
   readMdFiles,

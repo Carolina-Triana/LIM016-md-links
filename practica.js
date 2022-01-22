@@ -9,7 +9,7 @@ console.log('versiones Dependencias npm.........' + process.versions)
 console.log('sistema operativo donde estoy .........' + process.platform)
 console.log(' arquitectura del sistema operativo .........' + process.arch)
 console.log('tiempo activo de node o lo que tardo el proceso .........' + process.uptime())
-console.log(' argumentos del proceso argv es un arreglo que tiene dos parametros, [ruta donde se esta ejecutando] [archivo que se esta ejecutanto] .........' + process.argv)
+console.log(' argumentos del proceso argv es un arreglo que tiene dos parametros, [ruta donde se esta ejecutando] [archivo que se esta ejecutanto] .........' + process.argv[2])
 
 }
 singleThread()

@@ -7,82 +7,94 @@ import {
   statusOfLinks,
 } from "./index.js";
 
-//let pathUser = proces.argv[2]
-
+///////////////// CLI ///////////////////
+const countLinks = (arrLink, option) => {
+  let broken = 0
+	arrLink.forEach((hrefLink)=>{
+  if(hrefLink.message == 'OK') {
+      	return broken = broken + 1;
+		}else{
+      const lala = arrLink.map((item) => item.href);
+      console.table({ 'LINKS':lala.length, 'BROKEN': broken})
+    }
+  })
+}
+    
 const mdLinks = (path, option) => {
   return new Promise((resolve, reject) => {
     let userPath = rute(path);
-    console.log("aa", userPath);
-
-    
     let arrLinks = [];
-
     itsDirectory(userPath)
       .then((directory) => {
           if (directory === true) {
             readDirectory(userPath)
               .then((readPath) => {
-                console.log("readDirectory", readPath);
                 return readMdFiles(readPath);
               })
               .then((links) => {
-                console.log("readMdFiles", links.flat()); // me retorna el array de objetos con los links
-                return statusOfLinks(links.flat()) // ingreso ese array para validar los links
+                return statusOfLinks(links.flat()) 
                 .then((info) => {
                   Promise.all(info).then((es) => {
-                     //arrLinks.push(es)
-                     console.log('asasas',es)
-                     return arrLinks.push(es)
-                    // resolve(arrLinks.push(es));
+                     arrLinks.push(es)
+                     //console.log(es)
+                     if(option == '--stats'){
+                      countLinks(es ,  option)}
+                      else if(option == '--validate'){
+                        console.table(es)
+                      }else{                        
+                        console.log('                    ██████████████▄  ▐█▄▄▄▄█▌')
+                        console.log('                    ██████▌▄▌▄▐▐▌███  ▀▀██▀▀')                        
+                        console.log('                    ████▄█▌▄▌▄▐▐▌▀███▄▄█▌')
+                        console.log('                    ▄▄▄▄▄██████████████▀')
+                        console.log('              ')
+                        console.log('≪────≪  INGRESE UNA OPCION PARA MOSTRAR RESULTADOS  ≫────≫')
+                        console.log('      ')
+                        console.log('|⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻|')
+                        console.log('|  (☛ ✿ ◠ ‿ ◠ )☛  --validate ' , '||  (☛ ✿ ◠ ‿ ◠ )☛   --stats  |')
+                        console.log('|₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋|')
+                      }
+                     return arrLinks
                  })                                
                  }) .catch((err) => {
                     console.log(err)
                   });
               }) ; resolve(arrLinks);
              
-          } else  if (itsDirectory === false) {
+          } else  if (directory === false) {
             readFile(userPath)
               .then((readFile) => {
-                console.log('read file',readFile)
-                return readMdFiles(readFile);
-              })
-              .then((links) => {
-                console.log("linksD", links);
-                return statusOfLinks(links);
-              })
-              .then((info) => {
-            
-                  arrLinks.push(info);
-                
-              });
+                return statusOfLinks(readFile.flat())
+                .then((info) => {
+                  Promise.all(info).then((es) => {
+                     arrLinks.push(es)
+                     if(option == '--stats'){
+                      countLinks(es ,  option)}
+                      else if(option == '--validate'){
+                        console.table(es)
+                      }else{
+                        console.log('                    ██████████████▄  ▐█▄▄▄▄█▌')
+                        console.log('                    ██████▌▄▌▄▐▐▌███  ▀▀██▀▀')                        
+                        console.log('                    ████▄█▌▄▌▄▐▐▌▀███▄▄█▌')
+                        console.log('                    ▄▄▄▄▄██████████████▀')
+                        console.log('              ')
+                        console.log('≪────≪  INGRESE UNA OPCION PARA MOSTRAR RESULTADOS  ≫────≫')
+                        console.log('      ')
+                        console.log('|⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻⁻|')
+                        console.log('|  (☛ ✿ ◠ ‿ ◠ )☛  --validate ' , '||  (☛ ✿ ◠ ‿ ◠ )☛   --stats  |')
+                        console.log('|₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋₋|')
+                      }
+                      return arrLinks
+                 })                                
+                 }) .catch((err) => {
+                    console.log(err)
+                  });
+              }) 
             resolve(arrLinks);
           }
     })
     .catch((err) => {
-        reject("Ingrese una ruta valida", err);
+        reject(err);
   });
 })
 }
-
-/*mdLinks('../LIM016-md-links').then((res)=>{
-  console.log('sera que funciona?', res)
-})*/
-
-///////////////// CLI ///////////////////
-
-///// --validate
-
-const validate = (option) => {
-  return new Promise((resolve, reject) => {
-    mdLinks(arg[0], { validate: true }).then((res) => {
-      res.forEach((elem) => {
-        const href = elem.href;
-        const file = elem.file;
-        const http = elem.status;
-        const text = elem.text;
-      });
-    });
-  });
-};
-
-export { mdLinks };
+export { mdLinks }
