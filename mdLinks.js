@@ -14,8 +14,9 @@ const countLinks = (arrLink, option) => {
   if(hrefLink.message == 'OK') {
       	return broken = broken + 1;
 		}else{
-      const lala = arrLink.map((item) => item.href);
-      console.table({ 'LINKS':lala.length, 'BROKEN': broken})
+      const links = arrLink.map((item) => item.href); //revisar
+      console.table({ 'LINKS':links.length, 'BROKEN': broken})
+      
     }
   })
 }

@@ -34,26 +34,8 @@ const itsDirectory = (filePath) => {
     console.log("NO DIRECTORIO", isDirectory);
   }
 });*/
-/*
-const itsFile = (filePath) => {
-  return new Promise((resolve, reject) => {
-    fs.lstat(filePath, (err, stats) => {
-      if (err) {
-        reject(err);
-        return;
-      }
-      resolve(stats.isFile());
-    });
-  });
-};
-itsFile(rute(ruta)).then((isFile) => {
-  if (isFile) {
-    console.log("LA RUTA INGRESADA ES UN ARCHIVO", isFile);
-  } else {
-    console.log("NO ES UN ARCHIVO");
-  }
-});
-*/
+
+
 //Leer directorio y filtrar por md
 const readDirectory = (filePath) => {
   return new Promise((resolve, reject) => {
@@ -67,11 +49,12 @@ const readDirectory = (filePath) => {
           .filter(function (md) {
             return path.extname(md) === ext;
           })
-          .map((md) => path.join(filePath, md))
+          .map((md) =>path.join(filePath, md))
       );
     });
   });
 };
+
 // funcion para filtrar por links
 const linksRegex = (path) => {
   return new Promise((resolve, reject) => {
@@ -121,7 +104,7 @@ const readFile = (filePath) => {
 //leer archivos varios  y devolver links
 const readMdFiles = (arrayMd) => {
   // arrayMd es un arreglo de rutas
-  let objLinks = arrayMd.map((res) => {
+  let links = arrayMd.map((res) => {
     // Para cada ruta se devuelve una promesa
     return new Promise((resolve, reject) => {
       // Dentro de la promesa se lee cada archivo
@@ -137,7 +120,7 @@ const readMdFiles = (arrayMd) => {
           }
         })
       });
-    });return Promise.all(objLinks);
+    });return Promise.all(links);
   };
 
 // funcion verificar status de links
